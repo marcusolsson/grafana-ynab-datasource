@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "YNAB",
+  "id": "marcusolsson-ynab-datasource",
+  "metrics": true,
+  "backend": true,
+  "alerting": true,
+  "executable": "gpx_ynab_datasource",
+
+  "info": {
+    "description": "A data source for YNAB.",
+    "author": {
+      "name": "Marcus Olsson"
+    },
+    "keywords": ["ynab", "budget", "finance"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      { "name": "Website", "url": "https://github.com/marcusolsson/grafana-ynab-datasource" },
+      { "name": "License", "url": "https://github.com/marcusolsson/grafana-ynab-datasource/blob/main/LICENSE" }
+    ],
+    "screenshots": [{ "name": "YNAB", "path": "img/screenshot.png" }],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=8.0.0",
+    "plugins": []
+  }
+}

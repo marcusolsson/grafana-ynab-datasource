@@ -1,0 +1,26 @@
+{
+  "name": "grafana-ynab-datasource",
+  "version": "0.1.0",
+  "description": "A data source for YNAB.",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "sign": "grafana-toolkit plugin:sign",
+    "start": "yarn watch"
+  },
+  "author": "Grafana Labs",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "tslib": "2.3.1",
+    "@grafana/data": "8.3.4",
+    "@grafana/runtime": "8.3.4",
+    "@grafana/toolkit": "8.3.4",
+    "@grafana/ui": "8.3.4",
+    "@types/lodash": "latest"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
