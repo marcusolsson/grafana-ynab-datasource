@@ -2,11 +2,6 @@ package ynab
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
-
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 type Budget struct {
@@ -16,14 +11,7 @@ type Budget struct {
 }
 
 func (c *Client) Budgets(ctx context.Context, includeAccounts bool) ([]Budget, error) {
-	backend.Logger.Error("YNABClient.Budgets()", "includeAccounts", includeAccounts)
-
-	// return []Budget{
-	// 	{ID: "foo", Name: "Foo", Accounts: []Account{{ID: "foo-checking", Name: "Checking"}, {ID: "foo-buffer", Name: "Buffer"}}},
-	// 	{ID: "bar", Name: "Bar", Accounts: []Account{{ID: "bar-ica", Name: "ICA Banken"}}},
-	// }, nil
-
-	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+"/budgets", nil)
+	req, err := c.newRequest(ctx, "GET", "/budgets")
 	if err != nil {
 		return nil, err
 	}
@@ -32,26 +20,13 @@ func (c *Client) Budgets(ctx context.Context, includeAccounts bool) ([]Budget, e
 		req.URL.RawQuery = "include_accounts=true"
 	}
 
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiToken)
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
 	var payload struct {
 		Data struct {
 			Budgets []Budget `json:"budgets"`
 		} `json:"data"`
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil {
+	if err := c.do(req, &payload); err != nil {
 		return nil, err
 	}
 

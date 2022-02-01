@@ -1,7 +1,6 @@
-package plugin
+package main
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -65,11 +64,4 @@ func TestAlignByPeriod_Month(t *testing.T) {
 	if got.Rows() != 1 {
 		t.Fatalf("unexpected number of rows: want = %d; got = %d", 1, got.Rows())
 	}
-
-	for i := 0; i < got.Rows(); i++ {
-		for _, f := range got.Fields {
-			fmt.Println(f.At(i))
-		}
-	}
-
 }

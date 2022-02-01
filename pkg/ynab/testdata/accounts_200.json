@@ -1,0 +1,22 @@
+{
+  "data": {
+    "accounts": [
+      {
+        "id": "string",
+        "name": "string",
+        "type": "checking",
+        "on_budget": true,
+        "closed": true,
+        "note": "string",
+        "balance": 0,
+        "cleared_balance": 0,
+        "uncleared_balance": 0,
+        "transfer_payee_id": "string",
+        "direct_import_linked": true,
+        "direct_import_in_error": true,
+        "deleted": true
+      }
+    ],
+    "server_knowledge": 0
+  }
+}

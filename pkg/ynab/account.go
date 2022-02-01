@@ -2,11 +2,7 @@ package ynab
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
-
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 type Account struct {
@@ -26,24 +22,9 @@ type Account struct {
 }
 
 func (c *Client) Accounts(ctx context.Context, budgetID string) ([]Account, error) {
-	backend.Logger.Error("YNABClient.Accounts()", "budgetID", budgetID)
-
-	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+fmt.Sprintf("/budgets/%s/accounts", budgetID), nil)
+	req, err := c.newRequest(ctx, "GET", fmt.Sprintf("/budgets/%s/accounts", budgetID))
 	if err != nil {
 		return nil, err
-	}
-
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiToken)
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
 	var payload struct {
@@ -52,7 +33,7 @@ func (c *Client) Accounts(ctx context.Context, budgetID string) ([]Account, erro
 		} `json:"data"`
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil {
+	if err := c.do(req, &payload); err != nil {
 		return nil, err
 	}
 

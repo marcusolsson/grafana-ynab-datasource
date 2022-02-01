@@ -2,11 +2,7 @@ package ynab
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
-
-	"github.com/grafana/grafana-plugin-sdk-go/backend"
 )
 
 type Transaction struct {
@@ -45,29 +41,21 @@ type Subtransaction struct {
 	Deleted               bool   `json:"deleted,omitempty"`
 }
 
-func (c *Client) Transactions(ctx context.Context, budgetID string, sinceDate string) ([]Transaction, error) {
-	backend.Logger.Error("YNABClient.TransactionsForAccount()", "budgetID", budgetID, "sinceDate", sinceDate)
+func (c *Client) Transactions(ctx context.Context, budgetID, accountID, sinceDate string) ([]Transaction, error) {
+	if accountID != "" {
+		return c.transactionsForAccount(ctx, budgetID, accountID, sinceDate)
+	}
 
-	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+fmt.Sprintf("/budgets/%s/transactions", budgetID), nil)
+	req, err := c.newRequest(ctx, "GET", fmt.Sprintf("/budgets/%s/transactions", budgetID))
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiToken)
 
 	q := req.URL.Query()
-	q.Set("since_date", sinceDate)
-	req.URL.RawQuery = q.Encode()
 
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if sinceDate != "" {
+		q.Set("since_date", sinceDate)
+		req.URL.RawQuery = q.Encode()
 	}
 
 	var payload struct {
@@ -76,36 +64,23 @@ func (c *Client) Transactions(ctx context.Context, budgetID string, sinceDate st
 		} `json:"data"`
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil {
+	if err := c.do(req, &payload); err != nil {
 		return nil, err
 	}
 
 	return payload.Data.Transactions, nil
 }
 
-func (c *Client) TransactionsForAccount(ctx context.Context, budgetID, accountID string, sinceDate string) ([]Transaction, error) {
-	backend.Logger.Error("YNABClient.TransactionsForAccount()", "budgetID", budgetID, "accountID", accountID, "sinceDate", sinceDate)
-
-	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+fmt.Sprintf("/budgets/%s/accounts/%s/transactions", budgetID, accountID), nil)
+func (c *Client) transactionsForAccount(ctx context.Context, budgetID, accountID string, sinceDate string) ([]Transaction, error) {
+	req, err := c.newRequest(ctx, "GET", fmt.Sprintf("/budgets/%s/accounts/%s/transactions", budgetID, accountID))
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Authorization", "Bearer "+c.apiToken)
 
 	q := req.URL.Query()
-	q.Set("since_date", sinceDate)
-	req.URL.RawQuery = q.Encode()
-
-	resp, err := c.httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if sinceDate != "" {
+		q.Set("since_date", sinceDate)
+		req.URL.RawQuery = q.Encode()
 	}
 
 	var payload struct {
@@ -114,7 +89,7 @@ func (c *Client) TransactionsForAccount(ctx context.Context, budgetID, accountID
 		} `json:"data"`
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil {
+	if err := c.do(req, &payload); err != nil {
 		return nil, err
 	}
 

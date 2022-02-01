@@ -1,0 +1,36 @@
+{
+  "data": {
+    "category_groups": [
+      {
+        "id": "string",
+        "name": "string",
+        "hidden": true,
+        "deleted": true,
+        "categories": [
+          {
+            "id": "string",
+            "category_group_id": "string",
+            "name": "string",
+            "hidden": true,
+            "original_category_group_id": "string",
+            "note": "string",
+            "budgeted": 0,
+            "activity": 0,
+            "balance": 0,
+            "goal_type": "TB",
+            "goal_creation_month": "string",
+            "goal_target": 0,
+            "goal_target_month": "string",
+            "goal_percentage_complete": 0,
+            "goal_months_to_budget": 0,
+            "goal_under_funded": 0,
+            "goal_overall_funded": 0,
+            "goal_overall_left": 0,
+            "deleted": true
+          }
+        ]
+      }
+    ],
+    "server_knowledge": 0
+  }
+}

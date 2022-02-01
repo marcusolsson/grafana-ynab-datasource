@@ -1,0 +1,7 @@
+{
+  "error": {
+    "id": "string",
+    "name": "string",
+    "detail": "string"
+  }
+}

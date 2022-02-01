@@ -4,3 +4,15 @@
 [![Release](https://github.com/marcusolsson/grafana-ynab-datasource/actions/workflows/release.yml/badge.svg)](https://github.com/marcusolsson/grafana-ynab-datasource/actions/workflows/release.yml)
 
 A data source for [You Need A Budget](https://youneedabudget.com).
+
+## Configuration
+
+### Step 1: Generate a Personal Access Token
+
+Grafana needs your permission to access your budget on your behalf.
+
+1. Sign in to [YNAB](https://app.youneedabudget.com).
+1. Open the [Developer Settings](https://app.youneedabudget.com/settings/developer).
+1. Under **Personal Access Token**, click **New Token**.
+1. Enter your current password, and click **Generate**.
+1. Copy the Personal Access Token at the top of the page.
