@@ -12,7 +12,7 @@ type Range struct {
 }
 
 func (r Range) Contains(t time.Time) bool {
-	return r.Start.UnixMilli() <= t.UnixMilli() && t.UnixMilli() < r.End.UnixMilli()
+	return r.Start.UnixNano() <= t.UnixNano() && t.UnixNano() < r.End.UnixNano()
 }
 
 type Bucket struct {
