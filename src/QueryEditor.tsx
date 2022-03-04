@@ -114,7 +114,7 @@ export const QueryEditor = (props: Props) => {
             }}
           />
         </InlineField>
-        {query.queryType == 'transactions' && (
+        {query.queryType === 'transactions' && (
           <InlineField labelWidth={14}>
             <RadioButtonGroup
               value={query.transactionFilter}
@@ -130,7 +130,7 @@ export const QueryEditor = (props: Props) => {
             />
           </InlineField>
         )}
-        {query.queryType == 'spending' && (
+        {query.queryType === 'spending' && (
           <InlineField labelWidth={14}>
             <RadioButtonGroup
               value={query.spendingFilter}
@@ -149,7 +149,7 @@ export const QueryEditor = (props: Props) => {
           <div className="gf-form-label gf-form-label--grow"></div>
         </div>
       </InlineFieldRow>
-      {query.queryType == 'net_worth' && (
+      {query.queryType === 'net_worth' && (
         <InlineFieldRow>
           <InlineField label="Alignment period" labelWidth={14}>
             <Select
@@ -173,7 +173,7 @@ export const QueryEditor = (props: Props) => {
         </InlineFieldRow>
       )}
 
-      {query.queryType == 'spending' && (
+      {query.queryType === 'spending' && (
         <InlineFieldRow>
           {query.alignBy && (
             <InlineField label="Alignment period" labelWidth={14}>
