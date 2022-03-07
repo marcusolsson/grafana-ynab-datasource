@@ -29,6 +29,9 @@ export class DataSource extends DataSourceWithBackend<YNABQuery, YNABDataSourceO
     if (accountsArgs) {
       const budgets: Budget[] = await super.getResource('budgets');
 
+      // accounts($budget)
+      // [accounts($budget), $budget]
+
       const budget = budgets.find((budget) => budget.id === getTemplateSrv().replace(accountsArgs[1]));
 
       if (!budget) {

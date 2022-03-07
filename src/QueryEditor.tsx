@@ -44,10 +44,13 @@ export const QueryEditor = (props: Props) => {
     label: budget.name,
     value: budget.id,
   }));
-  selectableBudgets.unshift(...dashboardVariables);
+
+  if (dashboardVariables.length) {
+    selectableBudgets.unshift(...dashboardVariables);
+  }
 
   // Default to the first budget in the list.
-  if (!query.budgetId) {
+  if (!query.budgetId && selectableBudgets.length) {
     onBudgetChange(selectableBudgets[0]);
   }
 
@@ -63,7 +66,12 @@ export const QueryEditor = (props: Props) => {
     label: account.name,
     value: account.id,
   }));
-  selectableAccounts.unshift(...dashboardVariables);
+
+  if (dashboardVariables.length) {
+    selectableAccounts.unshift(...dashboardVariables);
+  }
+
+  console.log(budgetId, accountIds);
 
   return (
     <>
@@ -89,12 +97,12 @@ export const QueryEditor = (props: Props) => {
           <RadioButtonGroup
             value={query.queryType}
             options={[
-              { label: 'Net worth', value: 'net_worth' },
+              { label: 'Balance', value: 'balance' },
               { label: 'Spending', value: 'spending' },
               { label: 'Transactions', value: 'transactions' },
             ]}
             onChange={(value) => {
-              onChange({ ...query, queryType: value ?? 'net_worth' });
+              onChange({ ...query, queryType: value ?? 'balance' });
               onRunQuery();
             }}
           />
@@ -134,7 +142,7 @@ export const QueryEditor = (props: Props) => {
           <div className="gf-form-label gf-form-label--grow"></div>
         </div>
       </InlineFieldRow>
-      {query.queryType === 'net_worth' && (
+      {query.queryType === 'balance' && (
         <InlineFieldRow>
           <InlineField label="Alignment period" labelWidth={14}>
             <Select

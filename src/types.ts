@@ -26,7 +26,7 @@ export interface YNABQuery extends DataQuery {
 export const defaultQuery: Partial<YNABQuery> = {
   groupByCategory: false,
   period: 'day',
-  queryType: 'net_worth',
+  queryType: 'balance',
   transactionFilter: 'all',
   spendingFilter: 'spending',
   alignBy: 'account',

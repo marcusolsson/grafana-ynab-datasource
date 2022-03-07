@@ -155,62 +155,6 @@ func groupTransactions(txs []ynab.Transaction, fn func(tx ynab.Transaction) stri
 	return res
 }
 
-func netWorthFromFrame(frame *data.Frame) (*data.Frame, error) {
-	networth := data.NewFrame(
-		"net_worth",
-		data.NewField("time", nil, []time.Time{}),
-		data.NewField("debts", nil, []*float64{}),
-		data.NewField("assets", nil, []*float64{}),
-		data.NewField("net_worth", nil, []*float64{}),
-	)
-
-	for i := 0; i < frame.Rows(); i++ {
-		timeField := frame.Fields[0]
-		valueFields := frame.Fields[1:]
-
-		var income *float64
-		var spending *float64
-		net := new(float64)
-
-		for _, field := range valueFields {
-			val := field.CopyAt(i).(*float64)
-			if val == nil {
-				continue
-			}
-
-			if *val > 0 {
-				if income == nil {
-					income = val
-				} else {
-					*income += *val
-				}
-
-			}
-			if *val < 0 {
-				if spending == nil {
-					spending = val
-				} else {
-					*spending += *val
-				}
-
-			}
-		}
-
-		if income != nil {
-			if spending != nil {
-				*spending = -*spending
-				*net = *income - *spending
-			} else {
-				*net = *income
-			}
-		}
-
-		networth.AppendRow(timeField.At(i), spending, income, net)
-	}
-
-	return networth, nil
-}
-
 func measurementsToFrame(measurements []Measurement, fillMissing *data.FillMissing, idLabel, nameLabel string) (*data.Frame, error) {
 	longFrame := data.NewFrame(
 		"balance",

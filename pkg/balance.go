@@ -10,7 +10,7 @@ import (
 	"github.com/marcusolsson/grafana-ynab-datasource/pkg/ynab"
 )
 
-func (d *YNABDataSource) queryNetWorth(ctx context.Context, dsQuery DataSourceQuery, from, to time.Time) backend.DataResponse {
+func (d *YNABDataSource) queryBalance(ctx context.Context, dsQuery DataSourceQuery, from, to time.Time) backend.DataResponse {
 	period := PeriodDaily
 
 	if dsQuery.Period == "month" {
@@ -47,11 +47,6 @@ func (d *YNABDataSource) queryNetWorth(ctx context.Context, dsQuery DataSourceQu
 	})
 
 	frame, err := measurementsToFrame(acc, &data.FillMissing{Mode: data.FillModePrevious}, "account_id", "account_name")
-	if err != nil {
-		return backend.DataResponse{Error: err}
-	}
-
-	frame, err = netWorthFromFrame(frame)
 	if err != nil {
 		return backend.DataResponse{Error: err}
 	}

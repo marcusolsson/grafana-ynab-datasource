@@ -20,7 +20,6 @@ type DataSourceQuery struct {
 	QueryType         string   `json:"queryType"`
 	TransactionFilter string   `json:"transactionFilter"`
 	SpendingFilter    string   `json:"spendingFilter"`
-	NetWorthFilter    string   `json:"netWorthFilter"`
 }
 
 type YNABDataSource struct {
@@ -61,8 +60,8 @@ func (d *YNABDataSource) query(ctx context.Context, _ backend.PluginContext, dat
 	switch dsQuery.QueryType {
 	case "transactions":
 		return d.queryTransactions(ctx, dsQuery, from, to)
-	case "net_worth":
-		return d.queryNetWorth(ctx, dsQuery, from, to)
+	case "balance":
+		return d.queryBalance(ctx, dsQuery, from, to)
 	case "spending":
 		return d.querySpending(ctx, dsQuery, from, to)
 	default:
