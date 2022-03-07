@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { InlineFieldRow, InlineField, Select, RadioButtonGroup, MultiSelect } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { DataSource } from './datasource';
-import { defaultQuery, YNABDataSourceOptions, YNABQuery } from './types';
+import { getTemplateSrv } from '@grafana/runtime';
+import { InlineField, InlineFieldRow, MultiSelect, RadioButtonGroup, Select } from '@grafana/ui';
 import { defaults } from 'lodash';
-
-interface Account {
-  id: string;
-  name: string;
-  deleted: boolean;
-}
-
-interface Budget {
-  id: string;
-  name: string;
-  accounts: Account[];
-}
+import React, { useEffect, useState } from 'react';
+import { DataSource } from './datasource';
+import { Budget, defaultQuery, YNABDataSourceOptions, YNABQuery } from './types';
 
 type Props = QueryEditorProps<DataSource, YNABQuery, YNABDataSourceOptions>;
 
@@ -36,20 +25,14 @@ export const QueryEditor = (props: Props) => {
     refreshBudgets();
   }, [onChange, onRunQuery, props.datasource]);
 
+  const dashboardVariables = getTemplateSrv()
+    .getVariables()
+    .map((v) => ({ label: `$${v.name}`, value: `$${v.name}` }));
+
   // onBudgetChange updates the budget and resets the account.
   const onBudgetChange = (value?: SelectableValue<string>) => {
-    const budget = budgets.find((budget) => budget.id === value?.value);
-
-    if (budget) {
-      const accounts = budget.accounts.filter((account) => !account.deleted);
-
-      accounts.sort((a1, a2) => {
-        return a1.name.localeCompare(a2.name);
-      });
-
-      onChange({ ...query, budgetId: value?.value, accountIds: [] });
-      onRunQuery();
-    }
+    onChange({ ...query, budgetId: value?.value, accountIds: [] });
+    onRunQuery();
   };
 
   const onAccountChange = (value?: Array<SelectableValue<string>>) => {
@@ -61,13 +44,14 @@ export const QueryEditor = (props: Props) => {
     label: budget.name,
     value: budget.id,
   }));
+  selectableBudgets.unshift(...dashboardVariables);
 
   // Default to the first budget in the list.
   if (!query.budgetId) {
     onBudgetChange(selectableBudgets[0]);
   }
 
-  const selectedBudget = budgets.find((budget) => budget.id === query.budgetId);
+  const selectedBudget = budgets.find((budget) => budget.id === getTemplateSrv().replace(query.budgetId));
 
   const accounts = selectedBudget ? selectedBudget.accounts.filter((account) => !account.deleted) : [];
 
@@ -79,6 +63,7 @@ export const QueryEditor = (props: Props) => {
     label: account.name,
     value: account.id,
   }));
+  selectableAccounts.unshift(...dashboardVariables);
 
   return (
     <>
@@ -156,6 +141,7 @@ export const QueryEditor = (props: Props) => {
               width={20}
               value={query.period}
               options={[
+                ...dashboardVariables,
                 { label: 'Daily', value: 'day' },
                 { label: 'Weekly', value: 'week' },
                 { label: 'Monthly', value: 'month' },
@@ -181,6 +167,7 @@ export const QueryEditor = (props: Props) => {
                 width={20}
                 value={query.period}
                 options={[
+                  ...dashboardVariables,
                   { label: 'Daily', value: 'day' },
                   { label: 'Weekly', value: 'week' },
                   { label: 'Monthly', value: 'month' },
@@ -200,7 +187,6 @@ export const QueryEditor = (props: Props) => {
               options={[
                 { label: 'Account', value: 'account' },
                 { label: 'Payee', value: 'payee' },
-                { label: 'Category group', value: 'category_group' },
                 { label: 'Category', value: 'category' },
               ]}
               onChange={(value) => {

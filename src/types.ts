@@ -1,5 +1,17 @@
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
+export interface Account {
+  id: string;
+  name: string;
+  deleted: boolean;
+}
+
+export interface Budget {
+  id: string;
+  name: string;
+  accounts: Account[];
+}
+
 export interface YNABQuery extends DataQuery {
   budgetId?: string;
   accountIds?: string[];
