@@ -1,9 +1,7 @@
-import React, { ChangeEvent } from 'react';
-import { LegacyForms } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { YNABDataSourceOptions, OrbitSecureJsonData } from './types';
-
-const { SecretFormField } = LegacyForms;
+import { Button, Card, InlineField, InlineFieldRow, Input, LinkButton } from '@grafana/ui';
+import React, { ChangeEvent } from 'react';
+import { OrbitSecureJsonData, YNABDataSourceOptions } from './types';
 
 export const ConfigEditor = (props: DataSourcePluginOptionsEditorProps<YNABDataSourceOptions>) => {
   const { onOptionsChange, options } = props;
@@ -11,45 +9,58 @@ export const ConfigEditor = (props: DataSourcePluginOptionsEditorProps<YNABDataS
 
   const secureJsonData = (options.secureJsonData || {}) as OrbitSecureJsonData;
 
-  const onAPITokenChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onAccessTokenChange = (event: ChangeEvent<HTMLInputElement>) => {
     onOptionsChange({
       ...options,
       secureJsonData: {
-        apiToken: event.target.value,
+        accessToken: event.target.value,
       },
     });
   };
 
-  const onResetAPIToken = () => {
+  const onResetAccessToken = () => {
     onOptionsChange({
       ...options,
       secureJsonFields: {
         ...options.secureJsonFields,
-        apiToken: false,
+        accessToken: false,
       },
       secureJsonData: {
         ...options.secureJsonData,
-        apiToken: '',
+        accessToken: '',
       },
     });
   };
 
+  const configured = !!(secureJsonFields && secureJsonFields.accessToken);
+
   return (
-    <div className="gf-form-group">
-      <div className="gf-form-inline">
-        <div className="gf-form">
-          <SecretFormField
-            placeholder=""
-            isConfigured={(secureJsonFields && secureJsonFields.apiToken) as boolean}
-            value={secureJsonData.apiToken || ''}
-            label="API token"
-            labelWidth={8}
-            inputWidth={20}
-            onReset={onResetAPIToken}
-            onChange={onAPITokenChange}
+    <>
+      <Card
+        heading="Getting started"
+        description="To connect to YNAB, you need to generate a Personal Access Token in the YNAB app."
+      >
+        <Card.Actions>
+          <LinkButton target="_blank" variant="secondary" href="https://app.youneedabudget.com/settings/developer">
+            Generate new token
+          </LinkButton>
+        </Card.Actions>
+      </Card>
+      <InlineFieldRow>
+        <InlineField label="Personal access token" disabled={configured}>
+          <Input
+            type="password"
+            value={secureJsonData.accessToken || ''}
+            onChange={onAccessTokenChange}
+            placeholder={configured ? 'configured' : ''}
           />
-        </div>
-      </div>
-    </div>
+        </InlineField>
+        {configured && (
+          <Button onClick={onResetAccessToken} variant="secondary">
+            Reset
+          </Button>
+        )}
+      </InlineFieldRow>
+    </>
   );
 };

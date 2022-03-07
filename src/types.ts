@@ -23,5 +23,5 @@ export const defaultQuery: Partial<YNABQuery> = {
 export interface YNABDataSourceOptions extends DataSourceJsonData {}
 
 export interface OrbitSecureJsonData {
-  apiToken?: string;
+  accessToken?: string;
 }

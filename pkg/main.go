@@ -23,8 +23,8 @@ func main() {
 
 func NewDataSource(settings backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	var (
-		apiToken = settings.DecryptedSecureJSONData["apiToken"]
-		client   = ynab.NewCacheClient(ynab.NewClient(apiToken))
+		accessToken = settings.DecryptedSecureJSONData["accessToken"]
+		client      = ynab.NewCacheClient(ynab.NewClient(accessToken))
 	)
 
 	return NewYNABDatasource(client), nil
