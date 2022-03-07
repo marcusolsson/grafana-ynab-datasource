@@ -5,6 +5,14 @@
 
 A data source for [You Need A Budget](https://youneedabudget.com).
 
+## Installation
+
+The YNAB plugin isn't available on the [plugin marketplace](https://grafana.com/plugins) yet, but you can install it manually from your terminal:
+
+```bash
+grafana-cli --pluginUrl=https://github.com/marcusolsson/grafana-ynab-datasource/releases/download/v0.1.0/marcusolsson-ynab-datasource-0.1.0.zip plugins install marcusolsson-ynab-datasource
+```
+
 ## Configuration
 
 ### Step 1: Generate a Personal Access Token
