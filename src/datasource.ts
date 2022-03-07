@@ -6,4 +6,14 @@ export class DataSource extends DataSourceWithBackend<YNABQuery, YNABDataSourceO
   constructor(instanceSettings: DataSourceInstanceSettings<YNABDataSourceOptions>) {
     super(instanceSettings);
   }
+
+  async metricFindQuery(query: string, options?: any) {
+    // Retrieve DataQueryResponse based on query.
+    const response = await super.getResource(`budgets`);
+
+    // Convert query results to a MetricFindValue[]
+    const values = response.map((budget: { name: string }) => ({ text: budget.name }));
+
+    return values;
+  }
 }
