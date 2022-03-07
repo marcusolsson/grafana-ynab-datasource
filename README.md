@@ -16,3 +16,8 @@ Grafana needs your permission to access your budget on your behalf.
 1. Under **Personal Access Token**, click **New Token**.
 1. Enter your current password, and click **Generate**.
 1. Copy the Personal Access Token at the top of the page.
+
+### Step 2: Add a YNAB data source
+
+1. In Grafana, go to **Configuration** -> **Data Sources**, and click **Add data source**.
+1. In **Personal access token**, enter the token you copied from YNAB, and click **Save & test**.
