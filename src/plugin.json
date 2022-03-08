@@ -10,6 +10,11 @@
   "includes": [
     {
       "type": "dashboard",
+      "name": "Basic",
+      "path": "dashboards/basic.json"
+    },
+    {
+      "type": "dashboard",
       "name": "YNAB Finance",
       "path": "dashboards/dashboard.json"
     }
