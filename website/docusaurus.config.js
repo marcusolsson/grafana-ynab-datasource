@@ -1,7 +1,7 @@
 module.exports = {
   title: 'YNAB for Grafana',
   url: 'https://marcusolsson.github.io',
-  baseUrl: '/grafana-ynab-datasource',
+  baseUrl: '/grafana-ynab-datasource/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.svg',
