@@ -11,7 +11,7 @@ module.exports = {
     },
     {
       type: 'doc',
-      id: 'recipes',
+      id: 'query-editor',
     },
   ],
 };
