@@ -6,9 +6,24 @@ title: Installation
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+To use the YNAB data source, you first need to have a running Grafana installation. This page explains how to install Grafana and the YNAB data source.
+
+## Grafana Cloud
+
+The easiest way to get started with YNAB for Grafana is using [Grafana Cloud](https://grafana.com/products/cloud). Grafana Cloud lets you run Grafana for free (with some limitations).
+
+1. [Sign up for Grafana Cloud](https://grafana.com/auth/sign-up).
+1. Browse to **My Account** -> **Overview**.
+1. Scroll down to the boxes for Grafana, Prometheus, Loki, and so on.
+1. In the Grafana box, click **Log In** to start Grafana.
+
+## Self-managed Grafana
+
+If you prefer to run Grafana yourself, follow the instructions on how to [Download](https://grafana.com/grafana/download?edition=oss).
+
 You can install the plugin using [grafana-cli](https://grafana.com/docs/grafana/latest/administration/cli/), or by downloading the plugin manually.
 
-## Install using grafana-cli
+### Install using grafana-cli
 
 To install the latest version of the plugin, run the following command on the Grafana server:
 
@@ -43,7 +58,7 @@ grafana-cli.exe plugins install marcusolsson-ynab-datasource
   </TabItem>
 </Tabs>
 
-## Install manually
+### Install manually
 
 1. Go to [Releases](https://github.com/marcusolsson/grafana-ynab-datasource/releases) on the GitHub project page
 1. Find the release you want to install
