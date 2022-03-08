@@ -37,14 +37,6 @@ module.exports = {
               label: 'Installation',
               to: '/installation',
             },
-            {
-              label: 'Helpers',
-              to: '/helpers',
-            },
-            {
-              label: 'Recipes',
-              to: '/recipes',
-            },
           ],
         },
         {
