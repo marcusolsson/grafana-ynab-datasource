@@ -81,13 +81,18 @@ func categoryMappings(categoryGroups []ynab.CategoryGroup) (map[string]ynab.Cate
 	return res, nil
 }
 
-func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.CategoryGroup) (*data.Frame, error) {
+func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.CategoryGroup, unit string) (*data.Frame, error) {
+	amountField := data.NewField("amount", nil, []float64{})
+	amountField.Config = &data.FieldConfig{
+		Unit: unit,
+	}
+
 	frame := data.NewFrame(
 		"transactions",
 		data.NewField("time", nil, []time.Time{}),
 		data.NewField("account", nil, []string{}),
 		data.NewField("payee", nil, []string{}),
-		data.NewField("amount", nil, []float64{}),
+		amountField,
 		data.NewField("memo", nil, []string{}),
 		data.NewField("category", nil, []string{}),
 		data.NewField("category_group", nil, []*string{}),
@@ -155,7 +160,7 @@ func groupTransactions(txs []ynab.Transaction, fn func(tx ynab.Transaction) stri
 	return res
 }
 
-func measurementsToFrame(measurements []Measurement, fillMissing *data.FillMissing, idLabel, nameLabel string) (*data.Frame, error) {
+func measurementsToFrame(measurements []Measurement, fillMissing *data.FillMissing, idLabel, nameLabel string, unit string) (*data.Frame, error) {
 	longFrame := data.NewFrame(
 		"balance",
 		data.NewField("time", nil, []time.Time{}),
@@ -178,8 +183,17 @@ func measurementsToFrame(measurements []Measurement, fillMissing *data.FillMissi
 		field.Config = &data.FieldConfig{
 			DisplayName:       displayName,
 			DisplayNameFromDS: displayName,
+			Unit:              unit,
 		}
 	}
 
 	return wideFrame, nil
+}
+
+func convertCurrencyCode(isoCode string) string {
+	switch isoCode {
+	case "USD", "GBP", "EUR", "JPY", "RUB", "UAH", "BRL", "DKK", "ISK", "NOK", "SEK", "CZK", "CHF", "PLN", "ZAR", "INR", "KRW", "IDR", "PHP", "VND":
+		return "currency" + isoCode
+	}
+	return "locale"
 }

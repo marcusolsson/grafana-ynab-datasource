@@ -46,7 +46,12 @@ func (d *YNABDataSource) queryBalance(ctx context.Context, dsQuery DataSourceQue
 		return acc[i].Time.Before(acc[j].Time)
 	})
 
-	frame, err := measurementsToFrame(acc, &data.FillMissing{Mode: data.FillModePrevious}, "account_id", "account_name")
+	budget, err := d.client.Budget(ctx, dsQuery.BudgetID)
+	if err != nil {
+		return backend.DataResponse{Error: err}
+	}
+
+	frame, err := measurementsToFrame(acc, &data.FillMissing{Mode: data.FillModePrevious}, "account_id", "account_name", convertCurrencyCode(budget.CurrencyFormat.ISOCode))
 	if err != nil {
 		return backend.DataResponse{Error: err}
 	}

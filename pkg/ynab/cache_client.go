@@ -21,6 +21,24 @@ func NewCacheClient(client *Client) *CacheClient {
 	}
 }
 
+func (c *CacheClient) Budget(ctx context.Context, budgetID string) (Budget, error) {
+	key := "budget/" + budgetID
+
+	budget, found := c.cache.Get(key)
+	if !found {
+		budget, err := c.Client.Budget(ctx, budgetID)
+		if err != nil {
+			return Budget{}, err
+		}
+
+		c.cache.Set(key, budget, cache.DefaultExpiration)
+
+		return budget, nil
+	}
+
+	return budget.(Budget), nil
+}
+
 func (c *CacheClient) Budgets(ctx context.Context, includeAccounts bool) ([]Budget, error) {
 	budgets, found := c.cache.Get("budgets")
 	if !found {

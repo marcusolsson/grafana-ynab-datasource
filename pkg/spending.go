@@ -73,9 +73,18 @@ func (d *YNABDataSource) querySpending(ctx context.Context, dsQuery DataSourceQu
 		return acc[i].Time.Before(acc[j].Time)
 	})
 
-	frame, err := measurementsToFrame(acc, &data.FillMissing{
-		Mode: data.FillModeNull,
-	}, dsQuery.AlignBy+"_id", dsQuery.AlignBy+"_name")
+	budget, err := d.client.Budget(ctx, dsQuery.BudgetID)
+	if err != nil {
+		return backend.DataResponse{Error: err}
+	}
+
+	frame, err := measurementsToFrame(
+		acc,
+		&data.FillMissing{Mode: data.FillModeNull},
+		dsQuery.AlignBy+"_id",
+		dsQuery.AlignBy+"_name",
+		convertCurrencyCode(budget.CurrencyFormat.ISOCode),
+	)
 	if err != nil {
 		return backend.DataResponse{Error: err}
 	}

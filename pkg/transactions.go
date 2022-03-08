@@ -22,7 +22,12 @@ func (d *YNABDataSource) queryTransactions(ctx context.Context, dsQuery DataSour
 		return backend.DataResponse{Error: err}
 	}
 
-	frame, err := FrameFromTransactions(txs, categoryGroups, dsQuery, from, to)
+	budget, err := d.client.Budget(ctx, dsQuery.BudgetID)
+	if err != nil {
+		return backend.DataResponse{Error: err}
+	}
+
+	frame, err := frameFromTransactions(txs, categoryGroups, dsQuery, from, to, convertCurrencyCode(budget.CurrencyFormat.ISOCode))
 	if err != nil {
 		return backend.DataResponse{Error: err}
 	}
@@ -36,7 +41,7 @@ func (d *YNABDataSource) queryTransactions(ctx context.Context, dsQuery DataSour
 	}
 }
 
-func FrameFromTransactions(transactions []ynab.Transaction, categoryGroups []ynab.CategoryGroup, dsQuery DataSourceQuery, from, to time.Time) (*data.Frame, error) {
+func frameFromTransactions(transactions []ynab.Transaction, categoryGroups []ynab.CategoryGroup, dsQuery DataSourceQuery, from, to time.Time, unit string) (*data.Frame, error) {
 	categories, err := categoryMappings(categoryGroups)
 	if err != nil {
 		return nil, err
@@ -51,7 +56,7 @@ func FrameFromTransactions(transactions []ynab.Transaction, categoryGroups []yna
 
 	txs = filterTransactionsByType(txs, dsQuery.TransactionFilter)
 
-	frame, err := transactionsFrame(txs, categories)
+	frame, err := transactionsFrame(txs, categories, unit)
 	if err != nil {
 		return nil, err
 	}
