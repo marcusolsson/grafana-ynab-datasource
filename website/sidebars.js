@@ -13,5 +13,9 @@ module.exports = {
       type: 'doc',
       id: 'query-editor',
     },
+    {
+      type: 'doc',
+      id: 'variables',
+    },
   ],
 };
