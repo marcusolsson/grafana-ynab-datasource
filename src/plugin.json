@@ -7,7 +7,13 @@
   "backend": true,
   "alerting": true,
   "executable": "gpx_ynab_datasource",
-
+  "includes": [
+    {
+      "type": "dashboard",
+      "name": "YNAB Finance",
+      "path": "dashboards/dashboard.json"
+    }
+  ],
   "info": {
     "description": "A data source for YNAB.",
     "author": {
