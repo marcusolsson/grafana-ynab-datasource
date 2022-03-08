@@ -21,6 +21,8 @@ To connect to YNAB, you need to add a data source
 1. In Grafana, go to **Configuration** -> **Data Sources**, and click **Add data source**.
 1. In **Personal access token**, enter the token you copied from YNAB, and click **Save & test**.
 
+![Configuration](../static/img/config-editor.png)
+
 ## Step 3: Import a prebuilt dashboard
 
 While you can build your own dashboard from scratch, the YNAB data source comes with a set of dashboards built by the community specifically for YNAB.
@@ -29,3 +31,5 @@ While you can build your own dashboard from scratch, the YNAB data source comes 
 1. Click **Import** to the right of the dashboard you want to import.
 1. In the side menu, hover the cursor over **Dashboards** (four squares icon), and click **Browse** to see all your configured dashboards.
 1. Click one of the dashboard you imported.
+
+![Configuration](../static/img/import-dashboards.png)

@@ -5,6 +5,8 @@ title: Dashboard variables
 
 Grafana lets you share configuration across multiple panels in a dashboard, using _dashboard variables_. A dashboard variable can be used to dynamically update every panel in your dashboard.
 
+![Dashboard variables](../static/img/dashboard-variables.png)
+
 ## Step 1: Create a dashboard variable
 
 1. Click **Dashboard settings** (cog icon) at the top-right corner of your dashboard.
@@ -17,6 +19,8 @@ Grafana lets you share configuration across multiple panels in a dashboard, usin
 1. Click the arrow in the top-left corner to go back to the dashboard.
 
 In the top-left corner of the dashboard, you can now see a dropdown that contains all your budgets. You can select a budget from the dropdown to update the currently selected budget. However, you might notice that nothing changes in your panels. This is because the panels aren't using the variable yet.
+
+![Create a dashboard variable](../static/img/create-budget-variable.png)
 
 ## Step 2: Configure a panel to use a dashboard variable
 

@@ -12,10 +12,21 @@ To use the YNAB data source, you first need to have a running Grafana installati
 
 The easiest way to get started with YNAB for Grafana is using [Grafana Cloud](https://grafana.com/products/cloud). Grafana Cloud lets you run Grafana for free (with some limitations).
 
+### Step 1: Set up a Grafana Cloud instance
+
 1. [Sign up for Grafana Cloud](https://grafana.com/auth/sign-up).
 1. Browse to **My Account** -> **Overview**.
 1. Scroll down to the boxes for Grafana, Prometheus, Loki, and so on.
 1. In the Grafana box, click **Log In** to start Grafana.
+
+### Step 2: Install the YNAB data source
+
+1. Browse to the [YNAB data source](https://grafana.com/grafana/plugins/marcusolsson-ynab-datasource/) plugin page.
+1. Click the **Installation** tab.
+1. Select the account you want to install the plugin on.
+1. Click **Install plugin** for the instance you want to install the plugin on.
+
+It might take a few minutes before the plugin has been installed. Next, you'll [configure the YNAB data source](configuration.md).
 
 ## Self-managed Grafana
 
