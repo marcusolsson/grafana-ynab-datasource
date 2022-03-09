@@ -47,6 +47,9 @@ func TestBudget_200(t *testing.T) {
 		{
 			ID:   "string",
 			Name: "string",
+			CurrencyFormat: ynab.CurrencyFormat{
+				ISOCode: "string",
+			},
 			Accounts: []ynab.Account{
 				{
 					ID:                  "string",
