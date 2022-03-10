@@ -1,6 +1,8 @@
 package main
 
 import (
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/data"
@@ -82,6 +84,7 @@ func categoryMappings(categoryGroups []ynab.CategoryGroup) (map[string]ynab.Cate
 }
 
 func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.CategoryGroup, unit string) (*data.Frame, error) {
+
 	amountField := data.NewField("amount", nil, []float64{})
 	amountField.Config = &data.FieldConfig{
 		Unit: unit,
@@ -96,6 +99,8 @@ func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.C
 		data.NewField("memo", nil, []string{}),
 		data.NewField("category", nil, []string{}),
 		data.NewField("category_group", nil, []*string{}),
+		data.NewField("stock", nil, []string{}),
+		data.NewField("quantity", nil, []int{}),
 	)
 
 	for _, tx := range transactions {
@@ -117,15 +122,33 @@ func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.C
 		// regular "units".
 		amount := float64(tx.Amount) / 1000.0
 
-		frame.AppendRow(
-			date,
-			tx.AccountName,
-			tx.PayeeName,
-			amount,
-			tx.Memo,
-			tx.CategoryName,
-			categoryGroup,
-		)
+		stock, quantity, err := findStockPositions(tx.Memo)
+
+		if err == nil && stock != "" && quantity > 0 {
+			frame.AppendRow(
+				date,
+				tx.AccountName,
+				tx.PayeeName,
+				amount,
+				tx.Memo,
+				tx.CategoryName,
+				categoryGroup,
+				stock,
+				quantity,
+			)
+		} else {
+			frame.AppendRow(
+				date,
+				tx.AccountName,
+				tx.PayeeName,
+				amount,
+				tx.Memo,
+				tx.CategoryName,
+				categoryGroup,
+				nil,
+				nil,
+			)
+		}
 	}
 
 	return frame, nil
@@ -196,4 +219,30 @@ func convertCurrencyCode(isoCode string) string {
 		return "currency" + isoCode
 	}
 	return "locale"
+}
+
+func findStockPositions(memo string) (string, int, error) {
+
+	//Matches a label=value structure, ie "stock=AAPL, quantity=200"
+	regexStockPosition := regexp.MustCompile(`(?P<key>\b[A-Za-z.]+)=(?P<value>\w+)`)
+
+	var stockKey = "stock"
+	var quantityKey = "quantity"
+	var stock string
+	var quantity int
+
+	for _, match := range regexStockPosition.FindAllStringSubmatch(memo, -1) {
+		if match[1] == stockKey {
+			stock = match[2]
+		}
+		if match[1] == quantityKey {
+			quantityValue, err := strconv.Atoi(match[2])
+			if err != nil {
+				return "", 0, err
+			}
+			quantity = quantityValue
+		}
+	}
+
+	return stock, quantity, nil
 }
