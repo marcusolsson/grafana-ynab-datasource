@@ -145,8 +145,8 @@ func transactionsFrame(transactions []ynab.Transaction, groups map[string]ynab.C
 				tx.Memo,
 				tx.CategoryName,
 				categoryGroup,
-				nil,
-				nil,
+				"",
+				0,
 			)
 		}
 	}
