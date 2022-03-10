@@ -1,6 +1,6 @@
 {
   "name": "grafana-ynab-datasource",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A data source for YNAB.",
   "scripts": {
     "build": "grafana-toolkit plugin:build",

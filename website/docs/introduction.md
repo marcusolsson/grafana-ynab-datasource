@@ -22,14 +22,14 @@ export const Logo= ({ children }) =>(
         margin: 0,
         marginLeft: "1rem",
       }}>
-      YNAB
+      Grafana for YNAB
     </h1>
   </div>
 )
 
 <Logo />
 
-The [YNAB](https://youneedabudget.com) data source lets you visualize your personal finances in [Grafana](https://grafana.com).
+The unofficial [YNAB](https://youneedabudget.com) data source lets you visualize your personal finances in [Grafana](https://grafana.com).
 
 Grafana is an open source platform for data visualization. Grafana started out as a tool to monitor IT systems, but has over the years evolved into a platform used to visualize and monitor anything from [beehives](https://www.hiveeyes.org/) to [avocado plants](https://grafana.com/blog/2021/03/08/how-i-built-a-monitoring-system-for-my-avocado-plant-with-arduino-and-grafana-cloud/).
 
