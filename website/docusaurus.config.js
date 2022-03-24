@@ -26,6 +26,11 @@ module.exports = {
           label: 'Marketplace',
           position: 'right',
         },
+        {
+          href: 'https://marcus.se.net',
+          label: 'Who am I?',
+          position: 'right',
+        },
       ],
     },
     footer: {
